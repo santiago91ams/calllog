@@ -1,4 +1,4 @@
-package com.service.calllog;
+package com.service.calllog.core;
 
 /**
  * Created by ghitaistrate on 31/07/2017.

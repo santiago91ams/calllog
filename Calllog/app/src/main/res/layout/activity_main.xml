@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.service.calllog.MainActivity">
+    tools:context="com.service.calllog.ui.MainActivity">
 
     <Button
         android:id="@+id/button"

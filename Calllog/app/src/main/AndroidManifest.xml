@@ -3,9 +3,7 @@
     package="com.service.calllog">
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.WRITE_CALL_LOG" />
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
         android:allowBackup="true"
@@ -16,16 +14,18 @@
         android:theme="@style/AppTheme">
 
         <service
-            android:name=".CallLogService"
+            android:name=".core.CallLogService"
             android:enabled="true" />
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".ui.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".ui.MainActivity" />
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.service.calllog;
+package com.service.calllog.ui;
 
 import android.app.ActivityManager;
 import android.content.Context;
@@ -7,13 +7,13 @@ import android.database.Cursor;
 import android.provider.CallLog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import com.service.calllog.core.CallLogService;
+import com.service.calllog.R;
+
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
