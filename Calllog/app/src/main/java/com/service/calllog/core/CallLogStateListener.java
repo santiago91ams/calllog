@@ -4,17 +4,23 @@ package com.service.calllog.core;
  * Created by ghitaistrate on 31/07/2017.
  */
 
+import android.content.Context;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import com.service.calllog.ui.MainActivity;
+
 public class CallLogStateListener extends PhoneStateListener {
 
-//    private static final String TAG = "CallLogStateListener";
+    //    private static final String TAG = "CallLogStateListener";
 
-    public CallLogStateListener() {
+    private QueryCallLog queryCallLog;
+
+    public CallLogStateListener(QueryCallLog queryCallLog) {
         super();
         Log.d("xtag", "listener_init");
+        this.queryCallLog = queryCallLog;
     }
 
     @Override
@@ -25,6 +31,7 @@ public class CallLogStateListener extends PhoneStateListener {
             case TelephonyManager.CALL_STATE_IDLE:
                 //when Idle i.e no call
                 Log.d("xtag", "listener_idle");
+                queryCallLog.getCallDetails();
                 break;
             case TelephonyManager.CALL_STATE_OFFHOOK:
                 //when Off hook i.e in call

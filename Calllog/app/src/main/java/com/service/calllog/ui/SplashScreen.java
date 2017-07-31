@@ -26,8 +26,6 @@ public class SplashScreen extends Activity {
     @Override
     protected void onResume() {
 
-        CallLogPrefs prefs = new CallLogPrefs(this);
-
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
             if (!checkIfAlreadyhavePermission()) {
                 requestForSpecificPermission();

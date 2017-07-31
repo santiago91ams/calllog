@@ -1,19 +1,28 @@
 package com.service.calllog.core;
 
+import android.Manifest;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.os.Handler;
 import android.os.IBinder;
+import android.provider.CallLog;
+import android.support.v4.app.ActivityCompat;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+
+import com.service.calllog.ui.MainActivity;
+
+import java.util.Date;
 
 /**
  * Created by ghitaistrate on 31/07/2017.
  */
 
-public class CallLogService extends Service {
+public class CallLogService extends Service implements QueryCallLog {
 
     public Context context = this;
     public static Handler handler = null;
@@ -29,7 +38,7 @@ public class CallLogService extends Service {
         Log.d("xtag", "Service created");
 
         TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        telephonyManager.listen(new CallLogStateListener(), PhoneStateListener.LISTEN_CALL_STATE);
+        telephonyManager.listen(new CallLogStateListener(this), PhoneStateListener.LISTEN_CALL_STATE);
 
         handler = new Handler();
         runnable = new Runnable() {
@@ -58,7 +67,7 @@ public class CallLogService extends Service {
     }
 
     public void stopService() {
-        if (runnable != null){
+        if (runnable != null) {
             handler.removeCallbacks(runnable);
             Log.d("xtag", "Service killed");
         } else {
@@ -67,4 +76,42 @@ public class CallLogService extends Service {
 
     }
 
+    @Override
+    public void getCallDetails() {
+        Cursor managedCursor = getContentResolver().query(CallLog.Calls.CONTENT_URI, null, null, null, android.provider.CallLog.Calls.DATE + " DESC limit 1;");
+
+        int number = managedCursor.getColumnIndex(CallLog.Calls.NUMBER);
+        int type = managedCursor.getColumnIndex(CallLog.Calls.TYPE);
+        int date = managedCursor.getColumnIndex(CallLog.Calls.DATE);
+        int duration = managedCursor.getColumnIndex(CallLog.Calls.DURATION);
+
+        if (managedCursor.moveToNext()) {
+            String phNumber = managedCursor.getString(number);
+            String callType = managedCursor.getString(type);
+            String callDate = managedCursor.getString(date);
+            Date callDayTime = new Date(Long.valueOf(callDate));
+            String callDuration = managedCursor.getString(duration);
+            String dir = null;
+
+            int dircode = Integer.parseInt(callType);
+
+            switch (dircode) {
+                case CallLog.Calls.OUTGOING_TYPE:
+                    dir = "OUTGOING";
+                    break;
+                case CallLog.Calls.INCOMING_TYPE:
+                    dir = "INCOMING";
+                    break;
+                case CallLog.Calls.MISSED_TYPE:
+                    dir = "MISSED";
+                    break;
+            }
+
+            CallLogPrefs prefs = new CallLogPrefs(this);
+            MainActivity mainActivity = new MainActivity();
+            mainActivity.checkLog(phNumber, callType, callDate, callDayTime, callDuration);
+        }
+
+        managedCursor.close();
+    }
 }
