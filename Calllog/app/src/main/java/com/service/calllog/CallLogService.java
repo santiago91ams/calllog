@@ -8,6 +8,7 @@ import android.os.IBinder;
 import android.support.annotation.IntDef;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.widget.Toast;
 
 /**
@@ -17,7 +18,7 @@ import android.widget.Toast;
 public class CallLogService extends Service {
 
     public Context context = this;
-    public Handler handler = null;
+    public static Handler handler = null;
     public static Runnable runnable = null;
 
     @Override
@@ -27,15 +28,15 @@ public class CallLogService extends Service {
 
     @Override
     public void onCreate() {
-        Toast.makeText(this, "Service created!", Toast.LENGTH_LONG).show();
+        Log.d("xtag", "Service created");
 
         TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        telephonyManager.listen(new CallLogStateListener(context), PhoneStateListener.LISTEN_CALL_STATE);
+        telephonyManager.listen(new CallLogStateListener(), PhoneStateListener.LISTEN_CALL_STATE);
 
         handler = new Handler();
         runnable = new Runnable() {
             public void run() {
-                Toast.makeText(context, "Service is still running", Toast.LENGTH_LONG).show();
+                Log.d("xtag", "Service still running");
                 handler.postDelayed(runnable, 10000);
             }
         };
@@ -45,18 +46,27 @@ public class CallLogService extends Service {
 
     @Override
     public void onDestroy() {
-        /* IF YOU WANT THIS SERVICE KILLED WITH THE APP THEN UNCOMMENT THE FOLLOWING LINE */
-        //handler.removeCallbacks(runnable);
-        Toast.makeText(this, "Service stopped", Toast.LENGTH_LONG).show();
+        Log.d("xtag", "Service killed");
     }
 
     @Override
     public void onStart(Intent intent, int startid) {
-        Toast.makeText(this, "Service started by user.", Toast.LENGTH_LONG).show();
+        Log.d("xtag", "Service started");
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         return super.onStartCommand(intent, flags, startId);
     }
+
+    public void stopService() {
+        if (runnable != null){
+            handler.removeCallbacks(runnable);
+            Log.d("xtag", "Service killed");
+        } else {
+            Log.d("xtag", "Service runnable == null");
+        }
+
+    }
+
 }
