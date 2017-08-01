@@ -20,6 +20,8 @@ import com.service.calllog.R;
 import com.service.calllog.ws.ApiClient;
 import com.service.calllog.ws.ApiService;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import retrofit2.Call;
@@ -34,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     private boolean isServiceStarted;
     private Button serviceControl, updateWsUrl;
     private EditText urlInput;
+    public static String dateFormat = "dd-MM-yyyy hh:mm";
+    private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
     private void updateService(String label, boolean serviceState) {
@@ -111,13 +114,13 @@ public class MainActivity extends AppCompatActivity {
 
             Log.d("xtag", "time to post a new log with id: " + convertDateToMilis(callDayTime));
 
-            CallLogPOSTModel callLogPOSTModel = new CallLogPOSTModel(phNumber, callType, callDate, callDuration);
+            CallLogPOSTModel callLogPOSTModel = new CallLogPOSTModel(phNumber, callType, String.valueOf(callDayTime), callDuration);
 
-            postPhoneLog(callLogPOSTModel);
+            postPhoneLog(callLogPOSTModel, callDayTime);
         }
     }
 
-    public void postPhoneLog(CallLogPOSTModel callLogPOSTModel) {
+    public void postPhoneLog(CallLogPOSTModel callLogPOSTModel, final Date date) {
 
         ApiService apiService =
                 ApiClient.getClient().create(ApiService.class);
@@ -126,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-
+                CallLogPrefs.setSentLogID("" + date.getTime());
             }
 
             @Override

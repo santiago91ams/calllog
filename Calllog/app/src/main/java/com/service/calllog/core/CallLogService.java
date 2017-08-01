@@ -92,8 +92,31 @@ public class CallLogService extends Service implements QueryCallLog {
             Date callDayTime = new Date(Long.valueOf(callDate));
             String callDuration = managedCursor.getString(duration);
 
+            switch (Integer.parseInt(callType)) {
+                case CallLog.Calls.OUTGOING_TYPE:
+                    callType = "OUTGOING";
+                    break;
+
+                case CallLog.Calls.INCOMING_TYPE:
+                    callType = "INCOMING";
+                    break;
+
+                case CallLog.Calls.MISSED_TYPE:
+                    callType = "MISSED";
+                    break;
+                case CallLog.Calls.VOICEMAIL_TYPE:
+                    callType = "VOICEMAIL";
+                    break;
+                case CallLog.Calls.REJECTED_TYPE:
+                    callType = "REJECTED";
+                    break;
+                case CallLog.Calls.BLOCKED_TYPE:
+                    callType = "BLOCKED";
+                    break;
+
+            }
+
             CallLogPrefs prefs = new CallLogPrefs(this);
-//            prefs.setSentLogID("" + callDayTime.getTime());
             MainActivity mainActivity = new MainActivity();
             mainActivity.checkLog(phNumber, callType, callDate, callDayTime, callDuration);
         }

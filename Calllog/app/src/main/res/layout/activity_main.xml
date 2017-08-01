@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#bdbdbd"
     tools:context="com.service.calllog.ui.MainActivity">
 
     <Button
@@ -13,7 +14,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="200dp"
         android:layout_gravity="center"
-        android:background="@color/colorAccent"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:background="@drawable/button_effect"
         android:text="Button"/>
 
 
