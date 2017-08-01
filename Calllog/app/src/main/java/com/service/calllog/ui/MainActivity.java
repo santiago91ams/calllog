@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.service.calllog.core.CallLogPOSTModel;
 import com.service.calllog.core.CallLogPrefs;
@@ -63,14 +64,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (isServiceStarted) {
-                    updateService("Start service", false);
-                    callLogService.stopService();
+                if (!isEmpty(CallLogPrefs.getPostURL())) {
+                    if (isServiceStarted) {
+                        updateService("Start service", false);
+                        callLogService.stopService();
+                    } else {
+                        updateService("Stop service", true);
+                        startService(new Intent(MainActivity.this, CallLogService.class));
+                    }
                 } else {
-                    updateService("Stop service", true);
-                    startService(new Intent(MainActivity.this, CallLogService.class));
+                    Toast.makeText(MainActivity.this, "Update the post url first!", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
 
@@ -125,18 +129,21 @@ public class MainActivity extends AppCompatActivity {
         ApiService apiService =
                 ApiClient.getClient().create(ApiService.class);
 
-        Call<Void> call = apiService.sendPhoneLog(CallLogPrefs.getPostURL(), callLogPOSTModel);
-        call.enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                CallLogPrefs.setSentLogID("" + date.getTime());
-            }
+        if (!isEmpty(CallLogPrefs.getPostURL())) {
+            Call<Void> call = apiService.sendPhoneLog(CallLogPrefs.getPostURL(), callLogPOSTModel);
+            call.enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    CallLogPrefs.setSentLogID("" + date.getTime());
+                    Log.d("xtag", "save call log as sent - " + date.getTime());
+                }
 
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
 
-            }
-        });
+                }
+            });
+        }
     }
 
 }
