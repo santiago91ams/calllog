@@ -5,6 +5,7 @@ package com.service.calllog.core;
  */
 
 import android.content.Context;
+import android.os.Handler;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -31,7 +32,14 @@ public class CallLogStateListener extends PhoneStateListener {
             case TelephonyManager.CALL_STATE_IDLE:
                 //when Idle i.e no call
                 Log.d("xtag", "listener_idle");
-                queryCallLog.getCallDetails();
+                Handler handler = new Handler();
+                Runnable runnable = new Runnable() {
+                    public void run() {
+                        queryCallLog.getCallDetails();
+                    }
+                };
+                handler.postDelayed(runnable, 1000);
+
                 break;
             case TelephonyManager.CALL_STATE_OFFHOOK:
                 //when Off hook i.e in call

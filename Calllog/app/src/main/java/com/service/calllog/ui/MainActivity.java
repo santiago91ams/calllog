@@ -18,7 +18,7 @@ import com.service.calllog.R;
 
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
 
     private CallLogService callLogService = new CallLogService();
     private boolean isServiceStarted;
@@ -75,9 +75,12 @@ public class MainActivity extends AppCompatActivity{
     }
 
     public void checkLog(String phNumber, String callType, String callDate, Date callDayTime,
-                         String callDuration){
-        if (!CallLogPrefs.getLastSentLogID().equals(convertDateToMilis(callDayTime))) {
+                         String callDuration) {
+        if (!CallLogPrefs.getLastSentLogID().equals(String.valueOf(convertDateToMilis(callDayTime)))) {
+            CallLogPrefs.setSentLogID("" + callDayTime.getTime());
+
             Log.d("xtag", "time to post a new log with id: " + convertDateToMilis(callDayTime));
+
             CallLogPOSTModel callLogPOSTModel = new CallLogPOSTModel(phNumber, callType, callDate, callDuration);
         }
     }

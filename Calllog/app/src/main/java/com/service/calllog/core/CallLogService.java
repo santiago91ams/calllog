@@ -91,23 +91,9 @@ public class CallLogService extends Service implements QueryCallLog {
             String callDate = managedCursor.getString(date);
             Date callDayTime = new Date(Long.valueOf(callDate));
             String callDuration = managedCursor.getString(duration);
-            String dir = null;
-
-            int dircode = Integer.parseInt(callType);
-
-            switch (dircode) {
-                case CallLog.Calls.OUTGOING_TYPE:
-                    dir = "OUTGOING";
-                    break;
-                case CallLog.Calls.INCOMING_TYPE:
-                    dir = "INCOMING";
-                    break;
-                case CallLog.Calls.MISSED_TYPE:
-                    dir = "MISSED";
-                    break;
-            }
 
             CallLogPrefs prefs = new CallLogPrefs(this);
+//            prefs.setSentLogID("" + callDayTime.getTime());
             MainActivity mainActivity = new MainActivity();
             mainActivity.checkLog(phNumber, callType, callDate, callDayTime, callDuration);
         }
