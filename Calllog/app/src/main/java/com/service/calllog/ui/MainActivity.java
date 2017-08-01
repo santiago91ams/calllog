@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         serviceControl = (Button) findViewById(R.id.start_service);
         updateWsUrl = (Button) findViewById(R.id.update_ws_url);
         urlInput = (EditText) findViewById(R.id.input_post_url);
+        urlInput.setImeActionLabel("Ready to log", EditorInfo.IME_ACTION_DONE);
 
         isServiceStarted = checkIfServiceIsRunning(CallLogService.class);
 

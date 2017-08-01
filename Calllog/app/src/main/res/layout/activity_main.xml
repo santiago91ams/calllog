@@ -27,10 +27,9 @@
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:layout_marginTop="40dp"
-        android:ellipsize="end"
         android:hint="type post url here"
         android:imeOptions="actionDone"
-        android:maxLength="30"
+        android:inputType="text"
         android:maxLines="1" />
 
     <Button
