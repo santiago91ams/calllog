@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 public class CallLogPrefs {
 
     private static final String CALL_LOG_ID = "last.sent.log";
+    private static final String POST_URL = "post.url";
     private static SharedPreferences prefs;
 
     public CallLogPrefs(Context context) {
@@ -29,5 +30,12 @@ public class CallLogPrefs {
         return prefs.getString(CALL_LOG_ID, "");
     }
 
+    public static void setPostUrl(String url){
+        prefs.edit().putString(POST_URL, url).commit();
+    }
+
+    public static String getPostURL(){
+        return prefs.getString(POST_URL, "");
+    }
 
 }

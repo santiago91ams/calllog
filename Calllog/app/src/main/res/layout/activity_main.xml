@@ -8,21 +8,31 @@
     tools:context="com.service.calllog.ui.MainActivity">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/start_service"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="200dp"
         android:layout_gravity="center"
+        android:background="@color/colorAccent"
         android:text="Button"/>
 
 
     <EditText
-        android:id="@+id/post_url"
+        android:id="@+id/input_post_url"
         android:layout_marginTop="40dp"
         android:layout_marginRight="30dp"
         android:layout_marginLeft="30dp"
         android:hint="type post url here"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/update_ws_url"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@color/colorPrimary"
+        android:text="update"/>
+
 
 </android.widget.LinearLayout>
