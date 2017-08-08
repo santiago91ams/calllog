@@ -3,8 +3,7 @@ package com.service.calllog.ui;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.provider.CallLog;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -15,15 +14,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.service.calllog.core.CallLogPOSTModel;
 import com.service.calllog.core.CallLogPrefs;
 import com.service.calllog.core.CallLogService;
 import com.service.calllog.R;
+import com.service.calllog.database.HelperDB;
 import com.service.calllog.ws.ApiClient;
 import com.service.calllog.ws.ApiService;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.Date;
 
 import retrofit2.Call;
@@ -126,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void postPhoneLog(CallLogPOSTModel callLogPOSTModel, final Date date) {
+    public void postPhoneLog(final CallLogPOSTModel callLogPOSTModel, final Date date) {
 
         ApiService apiService =
                 ApiClient.getClient().create(ApiService.class);
@@ -142,6 +143,11 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<Void> call, Throwable t) {
+
+                    ArrayList<Object> list = new ArrayList<Object>();
+                    list.add(callLogPOSTModel);
+                    HelperDB helperDB = new HelperDB(MainActivity.this);
+                    helperDB.putListObject("list_of_unsent_logs", list);
 
                 }
             });
