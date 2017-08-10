@@ -24,14 +24,12 @@ import com.service.calllog.ui.MainActivity;
 
 import java.util.Date;
 
-public class CallLogService extends Service implements QueryCallLog {
+public class MyService extends Service implements QueryCallLog {
     private static final String TAG = "MyService";
-    private boolean isRunning = false;
+    private boolean isRunning  = false;
     private Looper looper;
     private MyServiceHandler myServiceHandler;
-    private Context context = this;
-    private TelephonyManager telephonyManager;
-    private CallLogStateListener callLogStateListener;
+    private  Context context = this;
 
     @Override
     public void onCreate() {
@@ -41,32 +39,24 @@ public class CallLogService extends Service implements QueryCallLog {
         myServiceHandler = new MyServiceHandler(looper);
         isRunning = true;
     }
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        Toast.makeText(this, "Service started.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "MyService Started.", Toast.LENGTH_SHORT).show();
 
-        telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        callLogStateListener = new CallLogStateListener(this);
-        telephonyManager.listen(callLogStateListener, PhoneStateListener.LISTEN_CALL_STATE);
-
+        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        telephonyManager.listen(new CallLogStateListener(this), PhoneStateListener.LISTEN_CALL_STATE);
         //If service is killed while starting, it restarts.
         return START_STICKY;
     }
-
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
-
     @Override
     public void onDestroy() {
         isRunning = false;
-        Toast.makeText(this, "Service stopped.", Toast.LENGTH_SHORT).show();
-        Log.d("xtag", "service stopped");
-        telephonyManager.listen(callLogStateListener, PhoneStateListener.LISTEN_NONE);
-        stopSelf();
+        Toast.makeText(this, "MyService Completed or Stopped.", Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -40,6 +40,7 @@ public class SplashScreen extends Activity {
 
     public void startCallLog() {
         startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 
 

@@ -10,8 +10,9 @@ import android.preference.PreferenceManager;
 
 public class CallLogPrefs {
 
-    private static final String CALL_LOG_ID = "last.sent.log";
-    private static final String POST_URL = "post.url";
+    private static final String CALL_LOG_ID = "callog.last.sent.log";
+    private static final String POST_URL = "callog.post.url";
+    private static final String IS_SERVICE_RUNNNG = "callog.service.running";
     private static SharedPreferences prefs;
 
     public CallLogPrefs(Context context) {
@@ -30,12 +31,20 @@ public class CallLogPrefs {
         return prefs.getString(CALL_LOG_ID, "");
     }
 
-    public static void setPostUrl(String url){
+    public static void setPostUrl(String url) {
         prefs.edit().putString(POST_URL, url).commit();
     }
 
-    public static String getPostURL(){
+    public static String getPostURL() {
         return prefs.getString(POST_URL, "");
+    }
+
+    public static void setServiceRunning(boolean isServiceRunning){
+        prefs.edit().putBoolean(IS_SERVICE_RUNNNG, isServiceRunning).commit();
+    }
+
+    public static boolean getServiceRunning(){
+        return prefs.getBoolean(IS_SERVICE_RUNNNG, false);
     }
 
 }
