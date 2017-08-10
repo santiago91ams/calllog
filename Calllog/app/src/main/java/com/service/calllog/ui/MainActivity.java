@@ -126,7 +126,8 @@ public class MainActivity extends AppCompatActivity {
             CallLogPOSTModel callLogPOSTModel = new CallLogPOSTModel(
                     phNumber,
                     callType,
-                    String.valueOf(android.text.format.DateFormat.format(dateFormat, callDayTime)),
+//                    String.valueOf(android.text.format.DateFormat.format(dateFormat, callDayTime)),
+                    callDate,
                     callDuration);
 
             HelperDB helperDB = new HelperDB(MainActivity.this);
@@ -170,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
                                         date);
                             }
                         };
-                        handler.postDelayed(runnable, 20000);
+                        handler.postDelayed(runnable, 600000);
                     }
                 }
             });
