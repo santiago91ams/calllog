@@ -9,8 +9,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.service.calllog.core.CallLogPrefs;
 import com.service.calllog.ui.MainActivity;
+
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by Ghita on 31/07/2017.
@@ -25,6 +28,8 @@ public class SplashScreen extends Activity {
 
     @Override
     protected void onResume() {
+
+        Fabric.with(this, new Crashlytics());
 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
             if (!checkIfAlreadyhavePermission()) {
