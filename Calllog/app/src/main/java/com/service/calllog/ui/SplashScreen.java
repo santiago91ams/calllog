@@ -29,7 +29,6 @@ public class SplashScreen extends Activity {
     @Override
     protected void onResume() {
 
-        Fabric.with(this, new Crashlytics());
 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
             if (!checkIfAlreadyhavePermission()) {
