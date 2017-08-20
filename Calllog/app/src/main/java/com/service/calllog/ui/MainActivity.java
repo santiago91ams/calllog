@@ -21,6 +21,7 @@ import com.service.calllog.core.CallLogPrefs;
 import com.service.calllog.core.CallLogService;
 import com.service.calllog.R;
 import com.service.calllog.core.MyService;
+import com.service.calllog.core.WSResponse;
 import com.service.calllog.database.HelperDB;
 import com.service.calllog.ws.ApiClient;
 import com.service.calllog.ws.ApiService;
@@ -63,6 +64,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (!TextUtils.isEmpty(prefs.getPostURL())) {
+            urlInput.setHint(prefs.getPostURL());
+        } else {
+            CallLogPrefs.setPostUrl("http://digitalexpression.ro/calllog/");
             urlInput.setHint(prefs.getPostURL());
         }
 
@@ -145,38 +149,49 @@ public class MainActivity extends AppCompatActivity {
                 ApiClient.getClient().create(ApiService.class);
 
         if (!isEmpty(CallLogPrefs.getPostURL())) {
-            Call<Void> call = apiService.sendPhoneLog(CallLogPrefs.getPostURL(), callLogPOSTModels);
-            call.enqueue(new Callback<Void>() {
+            Call<ArrayList<CallLogPOSTModel>> call = apiService.sendPhoneLog(CallLogPrefs.getPostURL(), callLogPOSTModels);
+            call.enqueue(new Callback<ArrayList<CallLogPOSTModel>>() {
                 @Override
-                public void onResponse(Call<Void> call, Response<Void> response) {
-                    CallLogPrefs.setSentLogID("" + date.getTime());
-                    Log.d("xtag", "save call log as sent - " + date.getTime());
+                public void onResponse(Call<ArrayList<CallLogPOSTModel>> call, Response<ArrayList<CallLogPOSTModel>> response) {
 
-                    ArrayList<Object> callLogPOSTModels = new ArrayList<Object>();
-                    HelperDB helperDB = new HelperDB(MainActivity.this);
-                    helperDB.putListObject("list_of_unsent_logs", callLogPOSTModels);
+                    ArrayList<CallLogPOSTModel> wsResponse = response.body();
+                    if (response.isSuccessful() && wsResponse != null) {
+
+                        CallLogPrefs.setSentLogID("" + date.getTime());
+                        Log.d("xtag", "save call log as sent - " + date.getTime());
+
+                        ArrayList<Object> callLogPOSTModels = new ArrayList<Object>();
+                        HelperDB helperDB = new HelperDB(MainActivity.this);
+                        helperDB.putListObject("list_of_unsent_logs", callLogPOSTModels);
+                    } else {
+                        resendCall(date);
+                    }
                 }
 
                 @Override
-                public void onFailure(Call<Void> call, Throwable t) {
+                public void onFailure(Call<ArrayList<CallLogPOSTModel>> call, Throwable t) {
 
-
-                    if (CallLogPrefs.getServiceRunning()) {
-                        final Handler handler = new Handler();
-                        runnable = new Runnable() {
-                            public void run() {
-                                Log.d("xtag", "resend arraylist");
-                                HelperDB helperDB = new HelperDB(MainActivity.this);
-                                postPhoneLog(helperDB.getListObject("list_of_unsent_logs", CallLogPOSTModel.class),
-                                        date);
-                            }
-                        };
-                        handler.postDelayed(runnable, 600000);
-                    }
+                    resendCall(date);
                 }
             });
         }
 
+    }
+
+    private void resendCall(final Date date) {
+        if (CallLogPrefs.getServiceRunning()) {
+            final Handler handler = new Handler();
+            runnable = new Runnable() {
+                public void run() {
+                    Log.d("xtag", "resend arraylist");
+                    HelperDB helperDB = new HelperDB(MainActivity.this);
+                    postPhoneLog(helperDB.getListObject("list_of_unsent_logs", CallLogPOSTModel.class),
+                            date);
+                }
+            };
+//                        handler.postDelayed(runnable, 600000);
+            handler.postDelayed(runnable, 30000);
+        }
     }
 
     @Override

@@ -48,7 +48,7 @@ public class CallLogService extends Service implements QueryCallLog {
         Toast.makeText(this, "Service started.", Toast.LENGTH_SHORT).show();
 
         telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        callLogStateListener = new CallLogStateListener(this);
+        callLogStateListener = new CallLogStateListener(this, this);
         telephonyManager.listen(callLogStateListener, PhoneStateListener.LISTEN_CALL_STATE);
 
         //If service is killed while starting, it restarts.
@@ -108,7 +108,7 @@ public class CallLogService extends Service implements QueryCallLog {
                     break;
             }
 
-            CallLogPrefs prefs = new CallLogPrefs(this);
+
             MainActivity mainActivity = new MainActivity();
             mainActivity.checkLog(phNumber, callType, callDate, callDayTime, callDuration);
         }

@@ -13,6 +13,7 @@ public class CallLogPrefs {
     private static final String CALL_LOG_ID = "callog.last.sent.log";
     private static final String POST_URL = "callog.post.url";
     private static final String IS_SERVICE_RUNNNG = "callog.service.running";
+    private static final String WAS_RINGING = "callog.service.was.ringing";
     private static SharedPreferences prefs;
 
     public CallLogPrefs(Context context) {
@@ -45,6 +46,14 @@ public class CallLogPrefs {
 
     public static boolean getServiceRunning(){
         return prefs.getBoolean(IS_SERVICE_RUNNNG, false);
+    }
+
+    public static void setWasRinging(boolean wasRinging){
+        prefs.edit().putBoolean(WAS_RINGING, wasRinging).commit();
+    }
+
+    public static boolean getWasRinging(){
+        return prefs.getBoolean(WAS_RINGING, false);
     }
 
 }

@@ -16,6 +16,6 @@ import retrofit2.http.Path;
 
 public interface ApiService {
     @POST("{fullUrl}")
-    Call<Void> sendPhoneLog(@Path(value = "fullUrl", encoded = true) String fullUrl, @Body ArrayList<Object> phoneLog);
+    Call<ArrayList<CallLogPOSTModel>> sendPhoneLog(@Path(value = "fullUrl", encoded = true) String fullUrl, @Body ArrayList<Object> phoneLog);
 }
 

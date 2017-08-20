@@ -17,10 +17,13 @@ public class CallLogStateListener extends PhoneStateListener {
     //    private static final String TAG = "CallLogStateListener";
 
     private QueryCallLog queryCallLog;
+    CallLogPrefs prefs;
 
-    public CallLogStateListener(QueryCallLog queryCallLog) {
+
+    public CallLogStateListener(QueryCallLog queryCallLog, Context context) {
         super();
         Log.d("xtag", "listener_init");
+        prefs = new CallLogPrefs(context);
         this.queryCallLog = queryCallLog;
     }
 
@@ -32,13 +35,17 @@ public class CallLogStateListener extends PhoneStateListener {
             case TelephonyManager.CALL_STATE_IDLE:
                 //when Idle i.e no call
                 Log.d("xtag", "listener_idle");
-                Handler handler = new Handler();
-                Runnable runnable = new Runnable() {
-                    public void run() {
-                        queryCallLog.getCallDetails();
-                    }
-                };
-                handler.postDelayed(runnable, 1000);
+
+                if(prefs.getWasRinging()){
+                    Handler handler = new Handler();
+                    Runnable runnable = new Runnable() {
+                        public void run() {
+                            queryCallLog.getCallDetails();
+                        }
+                    };
+                    handler.postDelayed(runnable, 1000);
+                }
+                prefs.setWasRinging(false);
 
                 break;
             case TelephonyManager.CALL_STATE_OFFHOOK:
@@ -49,6 +56,7 @@ public class CallLogStateListener extends PhoneStateListener {
             case TelephonyManager.CALL_STATE_RINGING:
                 //when Ringing
                 Log.d("xtag", "listener_ringing");
+                prefs.setWasRinging(true);
                 break;
             default:
                 break;

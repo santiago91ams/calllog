@@ -45,7 +45,7 @@ public class MyService extends Service implements QueryCallLog {
         Toast.makeText(this, "MyService Started.", Toast.LENGTH_SHORT).show();
 
         TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        telephonyManager.listen(new CallLogStateListener(this), PhoneStateListener.LISTEN_CALL_STATE);
+        telephonyManager.listen(new CallLogStateListener(this, this), PhoneStateListener.LISTEN_CALL_STATE);
         //If service is killed while starting, it restarts.
         return START_STICKY;
     }
